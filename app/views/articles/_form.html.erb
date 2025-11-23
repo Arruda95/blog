@@ -1,23 +1,16 @@
-<%= form_with model: article, local: true do |form| %>
-    <div>
-        <%= form.label :title %>
-        <%= form.text_field :title %>
-        <% article.errors.full_messages.each do |msg| %>
-       <div><%= msg %></div>
-       <% end %>
-    </div>
+<%= simple_form_for article do |form| %>
+    <%= form.input :title %>
+    <%= form.input :body, input_html: { rows: 10 } %>
+   
+    <br>
 
-    <div>
-        <%= form.label :body %><br>
-        <%= form.text_area :body %>
-        <% article.errors.full_messages.each do |msg| %>
-       <div><%= msg %></div>
-       <% end %>
-    </div>
+    <p>
+    
+      <%= form.button :submit, class: 'btn btn-primary' %>
+      <%= link_to 'Back', root_path, class: 'btn btn-secondary' %>
 
-    <div>
-        <%= form.submit %>
-    </div>
+    </p>
+
 <% end %>
 
-<%= link_to 'Back to Articles', articles_path %>   
+ 
