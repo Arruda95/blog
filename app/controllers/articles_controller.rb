@@ -4,12 +4,9 @@ class ArticlesController < ApplicationController
 
 
   def index
-    @highlights = Article.desc_order.first(3)
-    excluded_ids = @highlights.pluck(:id)
+    current_page = (params[:page] || 1).to_i
 
-    @articles = Article.desc_order  
-                       .where.not(id: excluded_ids)
-                       .page(params[:page])
+    @articles = Article.order(created_at: :desc).page(current_page).per(2)
   end
 
   def show;  end

@@ -1,8 +1,8 @@
-<%= render_if @highlights[0].present?, 'longer_featured',  article: @highlights[0] %>
+<%= render 'longer_featured' %>
 
 <div class="row mb-2">
-  <%= render_if @highlights[1].present?, 'medium_featured', article: @highlights[1] %>
-  <%= render_if @highlights[2].present?, 'medium_featured', article: @highlights[2] %>
+  <%= render 'medium_featured' %>
+  <%= render 'medium_featured' %>
 </div>
       
     <div class="row g-5">
@@ -15,11 +15,17 @@
       <p>
       <%= link_to 'New Article', new_article_path, class: 'btn btn-primary' %>
       </p>
+
+      <% @articles.each do |article| %>
         
-      <%= render @articles %>
-      
-      <%= render 'pagination' %>
+      <%= render article %>
+      <% end %>
+
+     <%= render 'pagination' %>
      </div>
 
      <%= render 'right_side' %>
      </div>
+     
+     </div>
+    </div>
