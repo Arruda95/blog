@@ -1,9 +1,12 @@
 class Article < ApplicationRecord
-validates :title, presence: true, length: { minimum: 5 }
-validates :body, presence: true, length: { minimum: 10 }
+    
+    belongs_to :category 
+    
+    validates :title, presence: true, length: { minimum: 5 }
+    validates :body, presence: true, length: { minimum: 10 }
 
-paginates_per 1
+    paginates_per 2
 
-scope :desc_order, -> { order(created_at: :desc) }
-scope :excluded_ids, ->(ids) { where.not(id: ids) }
+    scope :desc_order, -> { order(created_at: :desc) }
+    scope :whithout_highlights, ->(ids) { where("id NOT IN(#{ids})")if ids.present?} 
 end

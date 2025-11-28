@@ -5,11 +5,12 @@ class ArticlesController < ApplicationController
 
   def index
     @highlights = Article.desc_order.first(3)
-    excluded_ids = @highlights.pluck(:id)
-
-    @articles = Article.desc_order  
-                       .where.not(id: excluded_ids)
-                       .page(params[:page])
+    
+    current_page = (params[:page] || 1).to_i
+    highlight_ids = @highlights.pluck(:id).join(",")
+    @articles = Article.whithout_highlights(highlight_ids)
+                       .desc_order                        
+                       .page(current_page)
   end
 
   def show;  end
@@ -21,7 +22,7 @@ class ArticlesController < ApplicationController
   def create
     @article = Article.new(article_params)
     if @article.save
-      redirect_to @article
+      redirect_to @article, notice: "Article was successfully created."
     else
       render :new
     end
@@ -31,7 +32,7 @@ class ArticlesController < ApplicationController
 
   def update
     if @article.update(article_params)
-      redirect_to @article
+      redirect_to @article, notice: "Article was successfully updated."
     else
       render :edit
     end
@@ -40,13 +41,13 @@ class ArticlesController < ApplicationController
 
   def destroy
   @article.destroy
-  redirect_to root_path
+  redirect_to root_path, notice: "Article was successfully destroyed."
 end
 
   private
 
   def article_params
-    params.require(:article).permit(:title, :body)
+    params.require(:article).permit(:title, :body, :category_id)
   end
 
   def set_article
