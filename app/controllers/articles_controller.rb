@@ -1,16 +1,27 @@
 class ArticlesController < ApplicationController
+  include Paginable
+
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_article, only: %i[show edit update destroy]
   
 
   def index
-    @highlights = Article.desc_order.first(3)
-    
-    current_page = (params[:page] || 1).to_i
+    category = Category.find_by_name(params[:category]) if params[:category].present?
+    @highlights = Article.filter_by_category(category)
+                         .desc_order
+                         .first(3)
+
     highlight_ids = @highlights.pluck(:id).join(",")
+
+
+    
+
     @articles = Article.whithout_highlights(highlight_ids)
+                       .filter_by_category(category)
                        .desc_order                        
                        .page(current_page)
+
+    @categories = Category.sorted                   
   end
 
   def show;  end
