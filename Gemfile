@@ -44,3 +44,5 @@ gem "devise", "~> 4.9"
 gem "pundit", "~> 2.5"
 
 gem 'rolify', '>= 5.2'
+
+gem "groupdate", "~> 6.4"
